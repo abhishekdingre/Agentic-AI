@@ -1,0 +1,176 @@
+{
+  "allowlist.json": {
+    "mtime": 1789811699.8650017,
+    "seen": 1789817463.8782895,
+    "ast_hash": "2077a3277a42270945ab33dde4fed8c7",
+    "semantic_hash": "2077a3277a42270945ab33dde4fed8c7"
+  },
+  "corpus/clinical_trials/CT-001.md": {
+    "mtime": 1789812064.9015274,
+    "seen": 1789817463.878297,
+    "ast_hash": "2a4e493e22695afb19beab5950f732d8",
+    "semantic_hash": "2a4e493e22695afb19beab5950f732d8"
+  },
+  "corpus/clinical_trials/CT-002.md": {
+    "mtime": 1789812070.660072,
+    "seen": 1789817463.8783002,
+    "ast_hash": "878abba9c780dde00ce226e70530e622",
+    "semantic_hash": "878abba9c780dde00ce226e70530e622"
+  },
+  "corpus/clinical_trials/CT-003.md": {
+    "mtime": 1789812076.3596113,
+    "seen": 1789817463.8783019,
+    "ast_hash": "2e9c83a2021d096aab10f156dfbf6bf6",
+    "semantic_hash": "2e9c83a2021d096aab10f156dfbf6bf6"
+  },
+  "corpus/clinical_trials/CT-004.md": {
+    "mtime": 1789812084.8344128,
+    "seen": 1789817463.8783035,
+    "ast_hash": "a6c8c16f15aec58791eeae80f17bff20",
+    "semantic_hash": "a6c8c16f15aec58791eeae80f17bff20"
+  },
+  "corpus/clinical_trials/CT-005.md": {
+    "mtime": 1789812091.0690024,
+    "seen": 1789817463.8783047,
+    "ast_hash": "15492c5a4e5ee8f62c73883f41b971b2",
+    "semantic_hash": "15492c5a4e5ee8f62c73883f41b971b2"
+  },
+  "corpus/clinical_trials/CT-006.md": {
+    "mtime": 1789812096.6325288,
+    "seen": 1789817463.8783064,
+    "ast_hash": "12a415dd3a4bdf070780820fd1e886c7",
+    "semantic_hash": "12a415dd3a4bdf070780820fd1e886c7"
+  },
+  "corpus/clinical_trials/CT-007.md": {
+    "mtime": 1789812102.661099,
+    "seen": 1789817463.8783076,
+    "ast_hash": "4ce843e088e0e6f9dee80d6570c1bb92",
+    "semantic_hash": "4ce843e088e0e6f9dee80d6570c1bb92"
+  },
+  "corpus/internal_reports/IR-001.md": {
+    "mtime": 1789812112.6610446,
+    "seen": 1789817463.8783088,
+    "ast_hash": "d378cede0321ea5570309e7a1471685c",
+    "semantic_hash": "d378cede0321ea5570309e7a1471685c"
+  },
+  "corpus/internal_reports/IR-002-v1.md": {
+    "mtime": 1789812119.208664,
+    "seen": 1789817463.8783102,
+    "ast_hash": "c529c765e4e119cc8a03654b49190c31",
+    "semantic_hash": "c529c765e4e119cc8a03654b49190c31"
+  },
+  "corpus/internal_reports/IR-002-v2.md": {
+    "mtime": 1789812126.3083355,
+    "seen": 1789817463.8783116,
+    "ast_hash": "80e0cfafd97eb5f7512a5ac293a9dd2e",
+    "semantic_hash": "80e0cfafd97eb5f7512a5ac293a9dd2e"
+  },
+  "corpus/internal_reports/IR-003.md": {
+    "mtime": 1789812132.8539546,
+    "seen": 1789817463.8783135,
+    "ast_hash": "093e0e9e1f6800de2225294f9e11b1b5",
+    "semantic_hash": "093e0e9e1f6800de2225294f9e11b1b5"
+  },
+  "corpus/internal_reports/IR-004.md": {
+    "mtime": 1789812139.6415966,
+    "seen": 1789817463.8783145,
+    "ast_hash": "e9b0888cec2d3c9635cc2ff7af2e6809",
+    "semantic_hash": "e9b0888cec2d3c9635cc2ff7af2e6809"
+  },
+  "corpus/internal_reports/IR-005.md": {
+    "mtime": 1789812145.9811962,
+    "seen": 1789817463.8783157,
+    "ast_hash": "197c0228b738fdf1967a975a2ba34184",
+    "semantic_hash": "197c0228b738fdf1967a975a2ba34184"
+  },
+  "corpus/internal_reports/IR-006.md": {
+    "mtime": 1789812155.251073,
+    "seen": 1789817463.878317,
+    "ast_hash": "f08e2a36b9ddc3611f3d70a4caf74693",
+    "semantic_hash": "f08e2a36b9ddc3611f3d70a4caf74693"
+  },
+  "corpus/internal_reports/IR-007.md": {
+    "mtime": 1789812161.4246569,
+    "seen": 1789817463.878318,
+    "ast_hash": "7393077b10fe93efaed1545f75592a64",
+    "semantic_hash": "7393077b10fe93efaed1545f75592a64"
+  },
+  "corpus/literature/LIT-001.md": {
+    "mtime": 1789811966.0651793,
+    "seen": 1789817463.8783193,
+    "ast_hash": "48ae1f210becf21b99527c56a6360b16",
+    "semantic_hash": "48ae1f210becf21b99527c56a6360b16"
+  },
+  "corpus/literature/LIT-002.md": {
+    "mtime": 1789811974.6389904,
+    "seen": 1789817463.8783205,
+    "ast_hash": "aa9b54743cea916ce3f11d516de2887b",
+    "semantic_hash": "aa9b54743cea916ce3f11d516de2887b"
+  },
+  "corpus/literature/LIT-003.md": {
+    "mtime": 1789811982.6127446,
+    "seen": 1789817463.8783224,
+    "ast_hash": "9e80e0b94e6fac957231b149d7ed8f89",
+    "semantic_hash": "9e80e0b94e6fac957231b149d7ed8f89"
+  },
+  "corpus/literature/LIT-004.md": {
+    "mtime": 1789811989.6044059,
+    "seen": 1789817463.8783245,
+    "ast_hash": "ead47263298e5e2ec293a4a9ed53eb03",
+    "semantic_hash": "ead47263298e5e2ec293a4a9ed53eb03"
+  },
+  "corpus/literature/LIT-005.md": {
+    "mtime": 1789811997.3421376,
+    "seen": 1789817463.878326,
+    "ast_hash": "b877746674743cf0995f05ec19f37f12",
+    "semantic_hash": "b877746674743cf0995f05ec19f37f12"
+  },
+  "corpus/literature/LIT-006.md": {
+    "mtime": 1789812001.479529,
+    "seen": 1789817463.8783283,
+    "ast_hash": "5bbb18930b7a380cf8872853febc9a57",
+    "semantic_hash": "5bbb18930b7a380cf8872853febc9a57"
+  },
+  "corpus/literature/LIT-007.md": {
+    "mtime": 1789812008.5892015,
+    "seen": 1789817463.8783314,
+    "ast_hash": "1c93a8a0d52639c6c0402c7a45b4110e",
+    "semantic_hash": "1c93a8a0d52639c6c0402c7a45b4110e"
+  },
+  "corpus/literature/LIT-008.md": {
+    "mtime": 1789812015.7028742,
+    "seen": 1789817463.8783326,
+    "ast_hash": "1ac6095d56f06102e8ac8d5baf04e9bc",
+    "semantic_hash": "1ac6095d56f06102e8ac8d5baf04e9bc"
+  },
+  "corpus/patents/PAT-001.md": {
+    "mtime": 1789812031.7203891,
+    "seen": 1789817463.878334,
+    "ast_hash": "389940fa3a132f81e5033c569d8c531f",
+    "semantic_hash": "389940fa3a132f81e5033c569d8c531f"
+  },
+  "corpus/patents/PAT-002.md": {
+    "mtime": 1789812038.5000303,
+    "seen": 1789817463.8783355,
+    "ast_hash": "4a00bd9022022c0ac01cc3d2939efe5d",
+    "semantic_hash": "4a00bd9022022c0ac01cc3d2939efe5d"
+  },
+  "corpus/patents/PAT-003.md": {
+    "mtime": 1789812044.5015981,
+    "seen": 1789817463.8783367,
+    "ast_hash": "2935414571a9dcf0c6ad311810523fc8",
+    "semantic_hash": "2935414571a9dcf0c6ad311810523fc8"
+  },
+  "corpus/patents/PAT-004.md": {
+    "mtime": 1789812049.9631145,
+    "seen": 1789817463.878338,
+    "ast_hash": "e5d83c68e281389c8a841ac536021ac1",
+    "semantic_hash": "e5d83c68e281389c8a841ac536021ac1"
+  },
+  "corpus/patents/PAT-005.md": {
+    "mtime": 1789812055.4256313,
+    "seen": 1789817463.8783548,
+    "ast_hash": "756a6bc36d8e4a5691931e569a31dcbf",
+    "semantic_hash": "756a6bc36d8e4a5691931e569a31dcbf"
+  }
+}

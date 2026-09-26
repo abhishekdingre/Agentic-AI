@@ -1,0 +1,45 @@
+# Minimal local observability stack for backend/telemetry.py.
+#
+# KNOWN LIMITATION (flagged deliberately rather than guessed around): this
+# does NOT stand up the full SigNoz UI. As of SigNoz's current docs, the
+# official self-hosted SigNoz stack (ClickHouse + query-service + frontend)
+# is generated via their own `foundryctl` tool (`foundryctl gauge` /
+# `foundryctl forge`), not shipped as a single static docker-compose.yaml
+# anymore — vendoring that here would mean guessing at a moving multi-service
+# target this environment can't verify against the live SigNoz repo. Rather
+# than ship a compose file that might silently be broken, this file instead
+# stands up just the OpenTelemetry Collector on the standard OTLP ports
+# (4317 gRPC / 4318 HTTP) that backend/telemetry.py already exports to (see
+# OTEL_EXPORTER_OTLP_ENDPOINT in backend/config.py, default
+# http://localhost:4317). By default the collector logs every span/metric to
+# its own stdout via the `debug` exporter, so you get working, inspectable
+# telemetry with zero extra setup:
+#
+#   docker compose -f docker-compose.observability.yml up -d
+#   docker compose -f docker-compose.observability.yml logs -f otel-collector
+#
+# To see this in an actual SigNoz UI instead of raw collector logs, either:
+#   1. Point this collector at SigNoz Cloud (https://signoz.io/teams/) —
+#      uncomment the `otlp/signoz` exporter block in
+#      otel-collector-config.yaml, fill in your ingestion key/region
+#      endpoint, and add it alongside `debug` in both pipelines'
+#      `exporters:` lists.
+#   2. Run the full self-hosted SigNoz stack separately, following SigNoz's
+#      current install docs (https://signoz.io/docs/install/docker/), and
+#      point THIS collector's exporter at that stack's OTLP receiver instead
+#      of (or in addition to) `debug`.
+#
+# Either way, backend/telemetry.py itself never needs to change — it always
+# just exports OTLP to OTEL_EXPORTER_OTLP_ENDPOINT, which defaults to the
+# port mapping below.
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.148.0
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "4317:4317" # OTLP gRPC — matches backend/config.py's default OTEL_EXPORTER_OTLP_ENDPOINT
+      - "4318:4318" # OTLP HTTP
+    restart: unless-stopped

@@ -1,0 +1,335 @@
+{
+  "nodes": [
+    {
+      "id": "lit_001",
+      "source_id": "LIT-001",
+      "title": "CRB3 Signaling in Fibrotic Remodeling: A Review",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-001.md"
+    },
+    {
+      "id": "lit_002",
+      "source_id": "LIT-002",
+      "title": "CRB3 Pathway Dysregulation Defines a Molecular Subtype of Pulmonary Fibrosis (PF-7)",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-002.md"
+    },
+    {
+      "id": "lit_003",
+      "source_id": "LIT-003",
+      "title": "Discovery and Structure-Activity Relationships of AXN-2401, a Selective CRB3 Antagonist",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-003.md"
+    },
+    {
+      "id": "lit_004",
+      "source_id": "LIT-004",
+      "title": "AXN-2401 Attenuates Bleomycin-Induced Lung Fibrosis in CRB3-Humanized Mice",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-004.md"
+    },
+    {
+      "id": "lit_005",
+      "source_id": "LIT-005",
+      "title": "Elevated CRB3 Expression in Lung Tissue from PF-7 Patients: An Immunohistochemistry Survey",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-005.md"
+    },
+    {
+      "id": "lit_006",
+      "source_id": "LIT-006",
+      "title": "Pharmacokinetics and Metabolism of AXN-2401 in Preclinical Species",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-006.md"
+    },
+    {
+      "id": "lit_007",
+      "source_id": "LIT-007",
+      "title": "In Vitro hERG Channel Inhibition by AXN-2401: A Cardiac Safety Signal",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-007.md"
+    },
+    {
+      "id": "lit_008",
+      "source_id": "LIT-008",
+      "title": "The Changing Landscape of Antifibrotic Drug Targets: A Survey",
+      "domain": "literature",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/literature/LIT-008.md"
+    },
+    {
+      "id": "pat_001",
+      "source_id": "PAT-001",
+      "title": "Composition of Matter: AXN-2401 and Related CRB3-Antagonist Compounds",
+      "domain": "patents",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/patents/PAT-001.md"
+    },
+    {
+      "id": "pat_002",
+      "source_id": "PAT-002",
+      "title": "Method of Treating CRB3-Driven Pulmonary Fibrosis Subtypes with CRB3 Antagonists",
+      "domain": "patents",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/patents/PAT-002.md"
+    },
+    {
+      "id": "pat_003",
+      "source_id": "PAT-003",
+      "title": "CRB3 and FBX9 Biomarker Panel for Diagnosing PF-7",
+      "domain": "patents",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/patents/PAT-003.md"
+    },
+    {
+      "id": "pat_004",
+      "source_id": "PAT-004",
+      "title": "Crystalline Salt Forms of AXN-2401 and Methods of Preparation",
+      "domain": "patents",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/patents/PAT-004.md"
+    },
+    {
+      "id": "pat_005",
+      "source_id": "PAT-005",
+      "title": "Combination Therapy of AXN-2401 with Standard-of-Care Antifibrotics",
+      "domain": "patents",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/patents/PAT-005.md"
+    },
+    {
+      "id": "ct_001",
+      "source_id": "CT-001",
+      "title": "AXN-2401-101: A Phase 1 First-in-Human Safety and Pharmacokinetics Study in Healthy Volunteers",
+      "domain": "clinical_trials",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/clinical_trials/CT-001.md"
+    },
+    {
+      "id": "ct_002",
+      "source_id": "CT-002",
+      "title": "AXN-2401-102: A Phase 1b Multiple-Ascending-Dose Study with CRB3 Pathway Biomarkers in PF-7 Patients",
+      "domain": "clinical_trials",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/clinical_trials/CT-002.md"
+    },
+    {
+      "id": "ct_003",
+      "source_id": "CT-003",
+      "title": "AXN-2401-201: A Phase 2a Proof-of-Concept Efficacy Study in PF-7",
+      "domain": "clinical_trials",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/clinical_trials/CT-003.md"
+    },
+    {
+      "id": "ct_004",
+      "source_id": "CT-004",
+      "title": "AXN-2401-202: A Phase 2 Cardiac Safety Substudy (Holter ECG and QTc Analysis)",
+      "domain": "clinical_trials",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/clinical_trials/CT-004.md"
+    },
+    {
+      "id": "ct_005",
+      "source_id": "CT-005",
+      "title": "AXN-2401-203: A Phase 2b Dose-Ranging Study in PF-7",
+      "domain": "clinical_trials",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/clinical_trials/CT-005.md"
+    },
+    {
+      "id": "ct_006",
+      "source_id": "CT-006",
+      "title": "AXN-2401-204: A Phase 2 Open-Label Extension, Long-Term Safety in PF-7",
+      "domain": "clinical_trials",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/clinical_trials/CT-006.md"
+    },
+    {
+      "id": "ct_007",
+      "source_id": "CT-007",
+      "title": "AXN-2401-301: Phase 3 Study Design and Protocol Summary in PF-7 (Ongoing, Interim)",
+      "domain": "clinical_trials",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/clinical_trials/CT-007.md"
+    },
+    {
+      "id": "ir_001",
+      "source_id": "IR-001",
+      "title": "Internal Pharmacology Report: CRB3 Target Validation Program Summary",
+      "domain": "internal_reports",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/internal_reports/IR-001.md"
+    },
+    {
+      "id": "ir_002_v1",
+      "source_id": "IR-002-v1",
+      "title": "28-Day Rat Toxicology Study Report for AXN-2401",
+      "domain": "internal_reports",
+      "version": "1.0",
+      "status": "superseded",
+      "file_path": "data/corpus/internal_reports/IR-002-v1.md"
+    },
+    {
+      "id": "ir_002_v2",
+      "source_id": "IR-002-v2",
+      "title": "28-Day Rat Toxicology Study Report for AXN-2401 (Corrected Re-Analysis)",
+      "domain": "internal_reports",
+      "version": "2.0",
+      "status": "current",
+      "file_path": "data/corpus/internal_reports/IR-002-v2.md"
+    },
+    {
+      "id": "ir_003",
+      "source_id": "IR-003",
+      "title": "Formulation and CMC Development Report for AXN-2401 Tablets",
+      "domain": "internal_reports",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/internal_reports/IR-003.md"
+    },
+    {
+      "id": "ir_004",
+      "source_id": "IR-004",
+      "title": "PK/PD Modeling Report: Dose Projection for CRB3 Target Engagement",
+      "domain": "internal_reports",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/internal_reports/IR-004.md"
+    },
+    {
+      "id": "ir_005",
+      "source_id": "IR-005",
+      "title": "Competitive Landscape Analysis: CRB3-Targeted Antifibrotics",
+      "domain": "internal_reports",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/internal_reports/IR-005.md"
+    },
+    {
+      "id": "ir_006",
+      "source_id": "IR-006",
+      "title": "Internal Cardiac Safety Review: hERG and QTc Assessment for AXN-2401",
+      "domain": "internal_reports",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/internal_reports/IR-006.md"
+    },
+    {
+      "id": "ir_007",
+      "source_id": "IR-007",
+      "title": "Regulatory Strategy Briefing: AXN-2401 in PF-7",
+      "domain": "internal_reports",
+      "version": "1.0",
+      "status": "current",
+      "file_path": "data/corpus/internal_reports/IR-007.md"
+    }
+  ],
+  "edges": [
+    {
+      "source": "ir_002_v2",
+      "target": "ir_002_v1",
+      "relation": "supersedes",
+      "confidence": "EXTRACTED",
+      "evidence": "data/allowlist.json 'supersedes' field (ground truth registry, not inferred)"
+    },
+    {
+      "source": "lit_007",
+      "target": "ir_006",
+      "relation": "contradicts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "evidence": "graphify semantic extraction, read in full: LIT-007.md vs IR-006.md/CT-004.md"
+    },
+    {
+      "source": "lit_007",
+      "target": "ct_004",
+      "relation": "contradicts",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "evidence": "graphify semantic extraction, read in full: LIT-007.md vs IR-006.md/CT-004.md"
+    }
+  ],
+  "domain_clusters": {
+    "literature": [
+      "lit_001",
+      "lit_002",
+      "lit_003",
+      "lit_004",
+      "lit_005",
+      "lit_006",
+      "lit_007",
+      "lit_008"
+    ],
+    "patents": [
+      "pat_001",
+      "pat_002",
+      "pat_003",
+      "pat_004",
+      "pat_005"
+    ],
+    "clinical_trials": [
+      "ct_001",
+      "ct_002",
+      "ct_003",
+      "ct_004",
+      "ct_005",
+      "ct_006",
+      "ct_007"
+    ],
+    "internal_reports": [
+      "ir_001",
+      "ir_002_v1",
+      "ir_002_v2",
+      "ir_003",
+      "ir_004",
+      "ir_005",
+      "ir_006",
+      "ir_007"
+    ]
+  },
+  "contradiction_annotations": [
+    {
+      "topic": "hERG cardiac safety signal",
+      "documents": [
+        "ct_004",
+        "ir_006",
+        "lit_007"
+      ],
+      "summary": "Contested finding: external academic study (LIT-007) reports hERG IC50 = 4.8 micromolar with a free-drug safety margin narrower than the 30-fold reassurance threshold; internal GLP hERG assay (IR-006) reports IC50 > 30 micromolar with a margin exceeding 30-fold, and the dedicated Phase 2 Holter/QTc substudy (CT-004) shows no clinical QTc signal at therapeutic doses. The in vitro numeric discrepancy between LIT-007 and IR-006 is explicitly acknowledged as unresolved by both IR-006 and CT-004 rather than dismissed or explained."
+    }
+  ],
+  "source": {
+    "allowlist": "data/allowlist.json",
+    "corpus": "data/corpus/",
+    "graphify_graph": "graphify-out/graph.json"
+  }
+}

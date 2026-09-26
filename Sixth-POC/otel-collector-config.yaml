@@ -1,0 +1,45 @@
+# Config for the otel-collector service in docker-compose.observability.yml.
+#
+# Receives OTLP from backend/telemetry.py (both gRPC :4317 and HTTP :4318)
+# and, by default, just logs everything to its own stdout via the `debug`
+# exporter — so `docker compose -f docker-compose.observability.yml logs -f
+# otel-collector` gives you working, inspectable telemetry with zero extra
+# setup. See docker-compose.observability.yml's header comment for how to
+# additionally forward to a real SigNoz backend (self-hosted or Cloud).
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+  batch: {}
+
+exporters:
+  debug:
+    verbosity: detailed
+  # Uncomment and fill in to additionally forward to a real SigNoz backend
+  # (self-hosted collector, or SigNoz Cloud) instead of only logging here.
+  # otlp/signoz:
+  #   endpoint: "<your-signoz-otel-collector-host>:4317"
+  #   tls:
+  #     insecure: true   # set false + configure certs for SigNoz Cloud
+  #   headers:
+  #     signoz-ingestion-key: "<your-ingestion-key>"   # SigNoz Cloud only
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug]   # add: , otlp/signoz  once configured above
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug]   # add: , otlp/signoz  once configured above

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Literature Review — Grounded RAG</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Agentic Literature Review</h1>
+  <p class="subtitle">Grounded evidence retrieval across literature, patents, clinical trials &amp; internal reports</p>
+</header>
+
+<main class="app-main">
+
+  <section class="query-panel" aria-label="Query controls">
+    <form id="query-form" novalidate>
+
+      <fieldset class="domain-selector">
+        <legend>Search domains</legend>
+
+        <label class="domain-checkbox">
+          <input type="checkbox" name="domain" value="literature" checked>
+          <span>Literature</span>
+        </label>
+
+        <label class="domain-checkbox">
+          <input type="checkbox" name="domain" value="patents" checked>
+          <span>Patents</span>
+        </label>
+
+        <label class="domain-checkbox">
+          <input type="checkbox" name="domain" value="clinical_trials" checked>
+          <span>Clinical Trials</span>
+        </label>
+
+        <label class="domain-checkbox">
+          <input type="checkbox" name="domain" value="internal_reports" checked>
+          <span>Internal Reports</span>
+        </label>
+      </fieldset>
+
+      <div class="question-row">
+        <label for="question-input" class="visually-hidden">Research question</label>
+        <textarea
+          id="question-input"
+          name="question"
+          rows="2"
+          placeholder="e.g. What preclinical and clinical evidence supports CRB3 as a target for AXN-2401 in PF-7?"
+        ></textarea>
+        <button type="submit" id="submit-btn">Ask</button>
+      </div>
+
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+    </form>
+  </section>
+
+  <section class="results-area" id="results-area" aria-label="Results" aria-live="polite">
+    <p class="results-empty" id="results-empty">No questions asked yet. Select domains above and ask a research question to see grounded, cited evidence here.</p>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

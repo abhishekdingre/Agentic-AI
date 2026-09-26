@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+anthropic
+sentence-transformers
+chromadb
+pydantic
+python-dotenv
+pytest
+httpx
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-exporter-otlp
+mcp

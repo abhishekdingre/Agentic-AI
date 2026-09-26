@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "agentic-rag-poc-backend": {
+      "command": "venv/bin/python",
+      "args": ["backend/mcp_server.py"]
+    }
+  }
+}
