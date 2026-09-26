@@ -1,0 +1,23 @@
+[
+  {
+    "resourceType": "Patient",
+    "id": "patient-1",
+    "name": [{"text": "Jordan Reyes", "family": "Reyes", "given": ["Jordan"]}],
+    "gender": "male",
+    "birthDate": "1978-03-14"
+  },
+  {
+    "resourceType": "Patient",
+    "id": "patient-2",
+    "name": [{"text": "Morgan Lee", "family": "Lee", "given": ["Morgan"]}],
+    "gender": "female",
+    "birthDate": "1990-07-22"
+  },
+  {
+    "resourceType": "Patient",
+    "id": "patient-3",
+    "name": [{"text": "Casey Kim", "family": "Kim", "given": ["Casey"]}],
+    "gender": "female",
+    "birthDate": "2001-11-05"
+  }
+]

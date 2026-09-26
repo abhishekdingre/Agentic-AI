@@ -1,0 +1,16 @@
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.egg-info/
+
+# Docker / env
+.env
+banner-health-physician-copilot/app/**/postgres_data/
+banner-health-physician-copilot/app/**/minio_data/

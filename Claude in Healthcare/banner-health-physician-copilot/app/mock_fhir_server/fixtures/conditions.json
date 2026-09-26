@@ -1,0 +1,47 @@
+[
+  {
+    "resourceType": "Condition",
+    "id": "condition-1",
+    "clinicalStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active"}]},
+    "verificationStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed"}]},
+    "code": {"coding": [{"system": "http://hl7.org/fhir/sid/icd-10-cm", "code": "I10", "display": "Essential (primary) hypertension"}], "text": "Essential hypertension"},
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "recordedDate": "2025-01-10"
+  },
+  {
+    "resourceType": "Condition",
+    "id": "condition-2",
+    "clinicalStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active"}]},
+    "verificationStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed"}]},
+    "code": {"coding": [{"system": "http://hl7.org/fhir/sid/icd-10-cm", "code": "E11.9", "display": "Type 2 diabetes mellitus without complications"}], "text": "Type 2 diabetes mellitus"},
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "recordedDate": "2025-01-10"
+  },
+  {
+    "resourceType": "Condition",
+    "id": "condition-3",
+    "clinicalStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active"}]},
+    "verificationStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed"}]},
+    "code": {"coding": [{"system": "http://hl7.org/fhir/sid/icd-10-cm", "code": "J45.20", "display": "Mild intermittent asthma, uncomplicated"}], "text": "Mild intermittent asthma"},
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "recordedDate": "2024-11-02"
+  },
+  {
+    "resourceType": "Condition",
+    "id": "condition-4",
+    "clinicalStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active"}]},
+    "verificationStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed"}]},
+    "code": {"coding": [{"system": "http://hl7.org/fhir/sid/icd-10-cm", "code": "J30.9", "display": "Allergic rhinitis, unspecified"}], "text": "Allergic rhinitis"},
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "recordedDate": "2024-11-02"
+  },
+  {
+    "resourceType": "Condition",
+    "id": "condition-5",
+    "clinicalStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active"}]},
+    "verificationStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed"}]},
+    "code": {"coding": [{"system": "http://hl7.org/fhir/sid/icd-10-cm", "code": "S93.401A", "display": "Sprain of unspecified ligament of right ankle, initial encounter"}], "text": "Right ankle sprain"},
+    "subject": {"reference": "Patient/patient-3", "display": "Casey Kim"},
+    "recordedDate": "2026-08-20"
+  }
+]

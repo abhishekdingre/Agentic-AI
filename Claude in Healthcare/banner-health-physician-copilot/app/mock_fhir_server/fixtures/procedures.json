@@ -1,0 +1,34 @@
+[
+  {
+    "resourceType": "Procedure",
+    "id": "procedure-1",
+    "status": "completed",
+    "code": {"coding": [{"system": "http://snomed.info/sct", "code": "29303009", "display": "Electrocardiographic procedure"}], "text": "Electrocardiogram (ECG)"},
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "performedDateTime": "2026-08-01T09:20:00Z"
+  },
+  {
+    "resourceType": "Procedure",
+    "id": "procedure-2",
+    "status": "completed",
+    "code": {"coding": [{"system": "http://snomed.info/sct", "code": "23426006", "display": "Measurement of respiratory function"}], "text": "Spirometry"},
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "performedDateTime": "2026-07-10T14:15:00Z"
+  },
+  {
+    "resourceType": "Procedure",
+    "id": "procedure-3",
+    "status": "completed",
+    "code": {"coding": [{"system": "http://snomed.info/sct", "code": "86198006", "display": "Influenza vaccination"}], "text": "Influenza vaccination"},
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "performedDateTime": "2026-09-01T08:45:00Z"
+  },
+  {
+    "resourceType": "Procedure",
+    "id": "procedure-4",
+    "status": "completed",
+    "code": {"coding": [{"system": "http://snomed.info/sct", "code": "168537006", "display": "Plain radiography of ankle"}], "text": "X-ray of right ankle"},
+    "subject": {"reference": "Patient/patient-3", "display": "Casey Kim"},
+    "performedDateTime": "2026-08-20T11:10:00Z"
+  }
+]

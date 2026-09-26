@@ -1,0 +1,52 @@
+[
+  {
+    "resourceType": "MedicationRequest",
+    "id": "medicationrequest-1",
+    "status": "active",
+    "intent": "order",
+    "medicationCodeableConcept": {"coding": [{"system": "http://www.nlm.nih.gov/research/umls/rxnorm", "code": "314076", "display": "Lisinopril 10 MG Oral Tablet"}], "text": "Lisinopril 10mg oral tablet"},
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "authoredOn": "2025-01-10",
+    "dosageInstruction": [{"text": "Take 1 tablet by mouth once daily"}]
+  },
+  {
+    "resourceType": "MedicationRequest",
+    "id": "medicationrequest-2",
+    "status": "active",
+    "intent": "order",
+    "medicationCodeableConcept": {"coding": [{"system": "http://www.nlm.nih.gov/research/umls/rxnorm", "code": "861007", "display": "Metformin hydrochloride 500 MG Oral Tablet"}], "text": "Metformin 500mg oral tablet"},
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "authoredOn": "2025-01-10",
+    "dosageInstruction": [{"text": "Take 1 tablet by mouth twice daily with meals"}]
+  },
+  {
+    "resourceType": "MedicationRequest",
+    "id": "medicationrequest-3",
+    "status": "active",
+    "intent": "order",
+    "medicationCodeableConcept": {"coding": [{"system": "http://www.nlm.nih.gov/research/umls/rxnorm", "code": "745752", "display": "Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler"}], "text": "Albuterol inhaler"},
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "authoredOn": "2024-11-02",
+    "dosageInstruction": [{"text": "Inhale 2 puffs by mouth every 4-6 hours as needed for wheezing"}]
+  },
+  {
+    "resourceType": "MedicationRequest",
+    "id": "medicationrequest-4",
+    "status": "active",
+    "intent": "order",
+    "medicationCodeableConcept": {"coding": [{"system": "http://www.nlm.nih.gov/research/umls/rxnorm", "code": "895994", "display": "Fluticasone propionate 0.05 MG/ACTUAT Nasal Spray"}], "text": "Fluticasone nasal spray"},
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "authoredOn": "2024-11-02",
+    "dosageInstruction": [{"text": "Spray 1 spray in each nostril once daily"}]
+  },
+  {
+    "resourceType": "MedicationRequest",
+    "id": "medicationrequest-5",
+    "status": "active",
+    "intent": "order",
+    "medicationCodeableConcept": {"coding": [{"system": "http://www.nlm.nih.gov/research/umls/rxnorm", "code": "197806", "display": "Ibuprofen 400 MG Oral Tablet"}], "text": "Ibuprofen 400mg oral tablet"},
+    "subject": {"reference": "Patient/patient-3", "display": "Casey Kim"},
+    "authoredOn": "2026-08-20",
+    "dosageInstruction": [{"text": "Take 1 tablet by mouth every 6-8 hours as needed for pain"}]
+  }
+]

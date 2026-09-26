@@ -1,0 +1,26 @@
+[
+  {
+    "resourceType": "Practitioner",
+    "id": "practitioner-alvarez",
+    "name": [
+      {
+        "text": "Dr. Elena Alvarez",
+        "family": "Alvarez",
+        "given": ["Elena"],
+        "prefix": ["Dr."]
+      }
+    ]
+  },
+  {
+    "resourceType": "Practitioner",
+    "id": "practitioner-chen",
+    "name": [
+      {
+        "text": "Dr. Michael Chen",
+        "family": "Chen",
+        "given": ["Michael"],
+        "prefix": ["Dr."]
+      }
+    ]
+  }
+]

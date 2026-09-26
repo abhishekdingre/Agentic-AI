@@ -1,0 +1,107 @@
+[
+  {
+    "resourceType": "Encounter",
+    "id": "encounter-1",
+    "status": "finished",
+    "class": {
+      "coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB", "display": "ambulatory"}]
+    },
+    "type": [
+      {"coding": [{"system": "http://snomed.info/sct", "code": "185349003", "display": "Encounter for check up"}], "text": "Office visit"}
+    ],
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "participant": [
+      {
+        "type": [
+          {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "code": "ATND", "display": "attender"}]}
+        ],
+        "individual": {"reference": "Practitioner/practitioner-alvarez", "display": "Dr. Elena Alvarez"}
+      }
+    ],
+    "period": {"start": "2026-08-01T09:00:00Z", "end": "2026-08-01T09:45:00Z"}
+  },
+  {
+    "resourceType": "Encounter",
+    "id": "encounter-2",
+    "status": "finished",
+    "class": {
+      "coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB", "display": "ambulatory"}]
+    },
+    "type": [
+      {"coding": [{"system": "http://snomed.info/sct", "code": "185349003", "display": "Encounter for check up"}], "text": "Office visit"}
+    ],
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "participant": [
+      {
+        "type": [
+          {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "code": "ATND", "display": "attender"}]}
+        ],
+        "individual": {"reference": "Practitioner/practitioner-alvarez", "display": "Dr. Elena Alvarez"}
+      }
+    ],
+    "period": {"start": "2026-05-15T10:00:00Z", "end": "2026-05-15T10:30:00Z"}
+  },
+  {
+    "resourceType": "Encounter",
+    "id": "encounter-3",
+    "status": "finished",
+    "class": {
+      "coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB", "display": "ambulatory"}]
+    },
+    "type": [
+      {"coding": [{"system": "http://snomed.info/sct", "code": "185349003", "display": "Encounter for check up"}], "text": "Office visit"}
+    ],
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "participant": [
+      {
+        "type": [
+          {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "code": "ATND", "display": "attender"}]}
+        ],
+        "individual": {"reference": "Practitioner/practitioner-chen", "display": "Dr. Michael Chen"}
+      }
+    ],
+    "period": {"start": "2026-07-10T14:00:00Z", "end": "2026-07-10T14:30:00Z"}
+  },
+  {
+    "resourceType": "Encounter",
+    "id": "encounter-4",
+    "status": "finished",
+    "class": {
+      "coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB", "display": "ambulatory"}]
+    },
+    "type": [
+      {"coding": [{"system": "http://snomed.info/sct", "code": "185349003", "display": "Encounter for check up"}], "text": "Urgent care visit"}
+    ],
+    "subject": {"reference": "Patient/patient-3", "display": "Casey Kim"},
+    "participant": [
+      {
+        "type": [
+          {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "code": "ATND", "display": "attender"}]}
+        ],
+        "individual": {"reference": "Practitioner/practitioner-chen", "display": "Dr. Michael Chen"}
+      }
+    ],
+    "period": {"start": "2026-08-20T11:00:00Z", "end": "2026-08-20T11:20:00Z"}
+  },
+  {
+    "resourceType": "Encounter",
+    "id": "encounter-5",
+    "status": "finished",
+    "class": {
+      "coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB", "display": "ambulatory"}]
+    },
+    "type": [
+      {"coding": [{"system": "http://snomed.info/sct", "code": "185349003", "display": "Encounter for check up"}], "text": "Office visit"}
+    ],
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "participant": [
+      {
+        "type": [
+          {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType", "code": "ATND", "display": "attender"}]}
+        ],
+        "individual": {"reference": "Practitioner/practitioner-alvarez", "display": "Dr. Elena Alvarez"}
+      }
+    ],
+    "period": {"start": "2026-09-01T08:30:00Z", "end": "2026-09-01T09:00:00Z"}
+  }
+]

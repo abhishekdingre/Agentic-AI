@@ -1,0 +1,38 @@
+[
+  {
+    "resourceType": "DocumentReference",
+    "id": "documentreference-1",
+    "status": "current",
+    "type": {"coding": [{"system": "http://loinc.org", "code": "11506-3", "display": "Progress note"}], "text": "Progress note"},
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "date": "2026-05-15T11:00:00Z",
+    "content": [{"attachment": {"contentType": "text/plain", "title": "Progress note - Jordan Reyes, 2026-05-15"}}]
+  },
+  {
+    "resourceType": "DocumentReference",
+    "id": "documentreference-2",
+    "status": "current",
+    "type": {"coding": [{"system": "http://loinc.org", "code": "11488-4", "display": "Consultation note"}], "text": "Consultation note"},
+    "subject": {"reference": "Patient/patient-1", "display": "Jordan Reyes"},
+    "date": "2026-08-01T10:00:00Z",
+    "content": [{"attachment": {"contentType": "text/plain", "title": "Cardiology consultation note - Jordan Reyes, 2026-08-01"}}]
+  },
+  {
+    "resourceType": "DocumentReference",
+    "id": "documentreference-3",
+    "status": "current",
+    "type": {"coding": [{"system": "http://loinc.org", "code": "11488-4", "display": "Consultation note"}], "text": "Consultation note"},
+    "subject": {"reference": "Patient/patient-2", "display": "Morgan Lee"},
+    "date": "2026-07-10T15:00:00Z",
+    "content": [{"attachment": {"contentType": "text/plain", "title": "Pulmonology consultation note - Morgan Lee, 2026-07-10"}}]
+  },
+  {
+    "resourceType": "DocumentReference",
+    "id": "documentreference-4",
+    "status": "current",
+    "type": {"coding": [{"system": "http://loinc.org", "code": "34878-9", "display": "Emergency medicine note"}], "text": "Urgent care note"},
+    "subject": {"reference": "Patient/patient-3", "display": "Casey Kim"},
+    "date": "2026-08-20T11:30:00Z",
+    "content": [{"attachment": {"contentType": "text/plain", "title": "Orthopedics urgent care note - Casey Kim, 2026-08-20"}}]
+  }
+]
