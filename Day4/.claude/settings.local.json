@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sf http://localhost:4000/k6-results.html)",
+      "Bash(python3 *)",
+      "Bash(docker --version)",
+      "Bash(apt-cache show *)",
+      "Bash(snap find *)",
+      "Bash(curl -sf https://api.github.com/repos/grafana/grafana/releases/latest)",
+      "Bash(sudo apt-get *)",
+      "Bash(sudo tee *)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "sip-mutual-fund-data"
+  ],
+  "enabledMcpJsonServers": [
+    "k6"
+  ]
+}

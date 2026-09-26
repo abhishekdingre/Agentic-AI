@@ -1,0 +1,312 @@
+{
+  "__inputs": [],
+  "__requires": [
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "8.0.0" },
+    { "type": "datasource", "id": "influxdb", "name": "InfluxDB", "version": "1.0.0" }
+  ],
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+
+    {
+      "id": 1, "type": "stat", "title": "Virtual Users (VUs)",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null },
+            { "color": "yellow", "value": 5 },
+            { "color": "red", "value": 10 }
+          ]},
+          "unit": "short"
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "orientation": "auto", "textMode": "auto", "colorMode": "background" },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT last(\"value\") FROM \"vus\" WHERE $timeFilter",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 2, "type": "stat", "title": "Request Rate (req/s)",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "blue", "value": null }
+          ]},
+          "unit": "reqps"
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT non_negative_derivative(max(\"value\"), 1s) FROM \"http_reqs\" WHERE $timeFilter GROUP BY time($__interval) fill(0)",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 3, "type": "stat", "title": "HTTP Error Rate",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null },
+            { "color": "yellow", "value": 0.005 },
+            { "color": "red", "value": 0.01 }
+          ]},
+          "unit": "percentunit", "max": 1, "min": 0
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT last(\"value\") FROM \"http_req_failed\" WHERE $timeFilter",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 4, "type": "stat", "title": "p(95) Response Time",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null },
+            { "color": "yellow", "value": 300 },
+            { "color": "red", "value": 500 }
+          ]},
+          "unit": "ms"
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT percentile(\"value\", 95) FROM \"http_req_duration\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 5, "type": "stat", "title": "Checks Passed",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "red", "value": null },
+            { "color": "yellow", "value": 0.95 },
+            { "color": "green", "value": 0.99 }
+          ]},
+          "unit": "percentunit", "max": 1
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT last(\"value\") FROM \"checks\" WHERE $timeFilter",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 6, "type": "stat", "title": "Total Requests",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "short", "color": { "mode": "fixed", "fixedColor": "blue" } } },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT last(\"value\") FROM \"http_reqs\" WHERE $timeFilter",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 10, "type": "timeseries", "title": "Virtual Users Over Time",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 2, "fillOpacity": 15 },
+          "unit": "short"
+        }
+      },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT mean(\"value\") FROM \"vus\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "VUs", "legendFormat": "Active VUs"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT mean(\"value\") FROM \"vus_max\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "VUsMax", "legendFormat": "Max VUs"
+        }
+      ]
+    },
+
+    {
+      "id": 11, "type": "timeseries", "title": "Request Rate (req/s)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 2, "fillOpacity": 10 },
+          "unit": "reqps"
+        }
+      },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT non_negative_derivative(max(\"value\"), 1s) AS \"req/s\" FROM \"http_reqs\" WHERE $timeFilter GROUP BY time($__interval) fill(0)",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 20, "type": "timeseries", "title": "HTTP Request Duration — Percentiles",
+      "description": "p50, p95, p99 response time. Threshold lines at 500 ms (p95 SLO) and 1000 ms (p99 SLO).",
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 12 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 2 },
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 300 },
+              { "color": "red", "value": 500 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean", "max", "p95"] }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT percentile(\"value\", 50) FROM \"http_req_duration\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "p50", "legendFormat": "p50"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT percentile(\"value\", 95) FROM \"http_req_duration\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "p95", "legendFormat": "p95"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT percentile(\"value\", 99) FROM \"http_req_duration\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "p99", "legendFormat": "p99"
+        }
+      ]
+    },
+
+    {
+      "id": 30, "type": "timeseries", "title": "HTTP Error Rate",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 21 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit", "min": 0, "max": 0.05,
+          "color": { "mode": "fixed", "fixedColor": "red" },
+          "custom": { "lineWidth": 2, "fillOpacity": 20 },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null },
+            { "color": "red", "value": 0.01 }
+          ]}
+        }
+      },
+      "targets": [{
+        "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+        "query": "SELECT mean(\"value\") FROM \"http_req_failed\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+        "rawQuery": true, "refId": "A"
+      }]
+    },
+
+    {
+      "id": 31, "type": "timeseries", "title": "HTTP Request Duration Breakdown",
+      "description": "Time spent in each phase: DNS, TCP connect, TLS, waiting (TTFB), receiving.",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 21 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "custom": { "lineWidth": 1, "fillOpacity": 30, "stacking": { "mode": "normal" } }
+        }
+      },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT mean(\"value\") FROM \"http_req_waiting\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "waiting", "legendFormat": "Waiting (TTFB)"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT mean(\"value\") FROM \"http_req_receiving\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "receiving", "legendFormat": "Receiving"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT mean(\"value\") FROM \"http_req_sending\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "sending", "legendFormat": "Sending"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT mean(\"value\") FROM \"http_req_connecting\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "connecting", "legendFormat": "TCP Connect"
+        }
+      ]
+    },
+
+    {
+      "id": 40, "type": "timeseries", "title": "SIP Calculator — Custom Metrics",
+      "description": "Business-logic metrics: calculation success rate and per-VU timing.",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 29 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "lineWidth": 2 }
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Success Rate" }, "properties": [{ "id": "unit", "value": "percentunit" }, { "id": "custom.axisPlacement", "value": "right" }] },
+          { "matcher": { "id": "byName", "options": "p95 Duration" }, "properties": [{ "id": "unit", "value": "ms" }] }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT last(\"value\") FROM \"sip_success_rate\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "sr", "legendFormat": "Success Rate"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-k6" },
+          "query": "SELECT percentile(\"value\", 95) FROM \"sip_calculation_duration_ms\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true, "refId": "dur", "legendFormat": "p95 Duration"
+        }
+      ]
+    }
+
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "tags": ["k6", "load-test", "sip-calculator"],
+  "time": { "from": "now-5m", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "k6 — SIP Calculator Load Test",
+  "uid": "k6-sip-calculator",
+  "version": 1
+}

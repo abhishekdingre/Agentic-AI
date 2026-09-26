@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "k6": {
+      "args": [
+        "x",
+        "mcp"
+      ],
+      "command": "k6",
+      "type": "stdio"
+    },
+    "sip-mutual-fund-data": {
+      "args": [
+        "mcp-server/index.js"
+      ],
+      "command": "node"
+    }
+  }
+}

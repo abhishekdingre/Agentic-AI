@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SIP Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-1:       #2a78d6; /* Invested amount */
+    --series-2:       #eb6834; /* Estimated returns */
+    --status-good:    #0ca30c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-1:       #3987e5;
+      --series-2:       #d95926;
+      --status-good:    #0ca30c;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page-plane);
+    color: var(--text-primary);
+  }
+  header {
+    background: linear-gradient(135deg, #2a78d6 0%, #184f95 100%);
+    color: #ffffff;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.6rem; }
+  header p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1px solid var(--baseline);
+    border-radius: 6px;
+    background: var(--surface-1);
+    color: var(--text-primary);
+  }
+  input:focus { outline: 2px solid var(--series-1); outline-offset: 1px; }
+
+  button {
+    margin-top: 18px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--series-1);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  button:hover { background: #184f95; }
+
+  .error-text {
+    color: #d03b3b;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    min-height: 1.2em;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .kpi-tile { padding: 4px 0; }
+  .kpi-tile .label { font-size: 0.85rem; color: var(--text-secondary); }
+  .kpi-tile .value { font-size: 1.7rem; font-weight: 600; color: var(--text-primary); margin-top: 4px; }
+  .kpi-tile.returns .value { color: var(--status-good); }
+
+  .legend-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  .view-toggle {
+    background: none;
+    border: 1px solid var(--baseline);
+    color: var(--text-secondary);
+    font-weight: 500;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    margin-top: 0;
+  }
+  .view-toggle:hover { background: var(--page-plane); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 14px;
+  }
+  th, td {
+    text-align: right;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--gridline);
+    font-variant-numeric: tabular-nums;
+  }
+  th:first-child, td:first-child { text-align: left; font-variant-numeric: normal; }
+  th { color: var(--text-secondary); font-weight: 600; }
+
+  .hidden { display: none; }
+  .results-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+</style>
+</head>
+<body class="viz-root">
+
+<header>
+  <h1>SIP Calculator</h1>
+  <p>Estimate the maturity value of a monthly Systematic Investment Plan</p>
+</header>
+
+<div class="container">
+  <div class="card">
+    <form id="sipForm">
+      <div class="form-grid">
+        <div>
+          <label for="monthlyInvestment">Monthly investment (₹)</label>
+          <input type="number" id="monthlyInvestment" min="1" step="100" value="5000" required />
+        </div>
+        <div>
+          <label for="annualReturnRate">Expected annual return (%)</label>
+          <input type="number" id="annualReturnRate" min="0" max="100" step="0.1" value="12" required />
+        </div>
+        <div>
+          <label for="years">Investment period (years)</label>
+          <input type="number" id="years" min="1" max="50" step="1" value="10" required />
+        </div>
+      </div>
+      <button type="submit">Calculate</button>
+      <div class="error-text" id="errorText" role="alert"></div>
+    </form>
+  </div>
+
+  <div class="card hidden" id="resultsCard">
+    <div class="kpi-grid">
+      <div class="kpi-tile">
+        <div class="label">Invested amount</div>
+        <div class="value" id="investedValue">—</div>
+      </div>
+      <div class="kpi-tile returns">
+        <div class="label">Estimated returns</div>
+        <div class="value" id="returnsValue">—</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="label">Total value</div>
+        <div class="value" id="totalValue">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="chartCard">
+    <div class="results-header">
+      <div class="legend-row">
+        <span class="legend-item"><span class="swatch" style="background:var(--series-1)"></span>Invested amount</span>
+        <span class="legend-item"><span class="swatch" style="background:var(--series-2)"></span>Estimated returns</span>
+      </div>
+      <button type="button" class="view-toggle" id="viewToggle">View as table</button>
+    </div>
+    <canvas id="growthChart" height="280" role="img" aria-label="Stacked bar chart of invested amount and estimated returns by year"></canvas>
+    <div class="hidden" id="tableWrapper">
+      <table id="breakdownTable" aria-label="Year-by-year invested amount, returns, and total value">
+        <thead>
+          <tr><th>Year</th><th>Invested</th><th>Returns</th><th>Total value</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('sipForm');
+  const errorText = document.getElementById('errorText');
+  const resultsCard = document.getElementById('resultsCard');
+  const chartCard = document.getElementById('chartCard');
+  const tableWrapper = document.getElementById('tableWrapper');
+  const viewToggle = document.getElementById('viewToggle');
+  const canvas = document.getElementById('growthChart');
+  let chartInstance = null;
+  let latestBreakdown = [];
+
+  const currency = (value) =>
+    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value);
+
+  const cssVar = (name) => getComputedStyle(document.body).getPropertyValue(name).trim();
+
+  function renderChart(yearlyBreakdown) {
+    const labels = yearlyBreakdown.map((row) => `Year ${row.year}`);
+    const invested = yearlyBreakdown.map((row) => row.invested);
+    const returns = yearlyBreakdown.map((row) => row.returns);
+    const surface = cssVar('--surface-1');
+    const gridline = cssVar('--gridline');
+    const muted = cssVar('--text-muted');
+    const series1 = cssVar('--series-1');
+    const series2 = cssVar('--series-2');
+
+    if (chartInstance) {
+      chartInstance.data.labels = labels;
+      chartInstance.data.datasets[0].data = invested;
+      chartInstance.data.datasets[1].data = returns;
+      chartInstance.update();
+      return;
+    }
+
+    chartInstance = new Chart(canvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Invested amount',
+            data: invested,
+            backgroundColor: series1,
+            borderColor: surface,
+            borderWidth: 2,
+            borderRadius: 4,
+            borderSkipped: false,
+            stack: 'total',
+            maxBarThickness: 24,
+          },
+          {
+            label: 'Estimated returns',
+            data: returns,
+            backgroundColor: series2,
+            borderColor: surface,
+            borderWidth: 2,
+            borderRadius: 4,
+            borderSkipped: false,
+            stack: 'total',
+            maxBarThickness: 24,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${currency(ctx.parsed.y)}`,
+            },
+          },
+        },
+        scales: {
+          x: {
+            stacked: true,
+            grid: { display: false },
+            ticks: { color: muted },
+          },
+          y: {
+            stacked: true,
+            grid: { color: gridline },
+            border: { display: false },
+            ticks: {
+              color: muted,
+              callback: (value) => currency(value).replace('.00', ''),
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function renderTable(yearlyBreakdown) {
+    const tbody = document.querySelector('#breakdownTable tbody');
+    tbody.innerHTML = '';
+    for (const row of yearlyBreakdown) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>Year ${row.year}</td><td>${currency(row.invested)}</td><td>${currency(row.returns)}</td><td>${currency(row.value)}</td>`;
+      tbody.appendChild(tr);
+    }
+  }
+
+  viewToggle.addEventListener('click', () => {
+    const showingTable = !tableWrapper.classList.contains('hidden');
+    tableWrapper.classList.toggle('hidden', showingTable);
+    canvas.classList.toggle('hidden', !showingTable);
+    viewToggle.textContent = showingTable ? 'View as table' : 'View as chart';
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    errorText.textContent = '';
+
+    const payload = {
+      monthlyInvestment: parseFloat(document.getElementById('monthlyInvestment').value),
+      annualReturnRate: parseFloat(document.getElementById('annualReturnRate').value),
+      years: parseFloat(document.getElementById('years').value),
+    };
+
+    try {
+      const response = await fetch('/api/sip/calculate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        errorText.textContent = data.error || 'Something went wrong.';
+        return;
+      }
+
+      document.getElementById('investedValue').textContent = currency(data.investedAmount);
+      document.getElementById('returnsValue').textContent = currency(data.estimatedReturns);
+      document.getElementById('totalValue').textContent = currency(data.totalValue);
+      resultsCard.classList.remove('hidden');
+      chartCard.classList.remove('hidden');
+
+      latestBreakdown = data.yearlyBreakdown;
+      renderChart(latestBreakdown);
+      renderTable(latestBreakdown);
+    } catch (err) {
+      errorText.textContent = 'Could not reach the backend. Is the server running?';
+    }
+  });
+
+  form.dispatchEvent(new Event('submit'));
+</script>
+</body>
+</html>

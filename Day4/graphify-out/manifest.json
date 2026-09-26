@@ -1,0 +1,50 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1789796008.473931,
+    "seen": 1789796343.0211754,
+    "ast_hash": "d4018551ef011bc275a58bd63e4924e1",
+    "semantic_hash": "d4018551ef011bc275a58bd63e4924e1"
+  },
+  ".mcp.json": {
+    "mtime": 1789794585.6193752,
+    "seen": 1789796343.0211842,
+    "ast_hash": "8e319e1792e511956704c2a886493f32",
+    "semantic_hash": "8e319e1792e511956704c2a886493f32"
+  },
+  "backend/package.json": {
+    "mtime": 1789794496.505947,
+    "seen": 1789796343.021188,
+    "ast_hash": "4fa8e437d7e6fef773ab5ef8dbfcccab",
+    "semantic_hash": "4fa8e437d7e6fef773ab5ef8dbfcccab"
+  },
+  "backend/server.js": {
+    "mtime": 1789794516.013792,
+    "seen": 1789796343.0211911,
+    "ast_hash": "bef2ff62fec9372e7ff7a8f01f562693",
+    "semantic_hash": "bef2ff62fec9372e7ff7a8f01f562693"
+  },
+  "mcp-server/index.js": {
+    "mtime": 1789794579.1966543,
+    "seen": 1789796343.0211933,
+    "ast_hash": "268562373a4b22e3031275f6034a8139",
+    "semantic_hash": "268562373a4b22e3031275f6034a8139"
+  },
+  "mcp-server/package.json": {
+    "mtime": 1789794564.4023685,
+    "seen": 1789796343.0211952,
+    "ast_hash": "1d37db8eea54232c613167c6f33a1b7e",
+    "semantic_hash": "1d37db8eea54232c613167c6f33a1b7e"
+  },
+  ".claude/agents/backend.md": {
+    "mtime": 1789794597.6135094,
+    "seen": 1789796343.0211978,
+    "ast_hash": "9f59fc34087ed3e8b28a8cf8377642e1",
+    "semantic_hash": "9f59fc34087ed3e8b28a8cf8377642e1"
+  },
+  "frontend/index.html": {
+    "mtime": 1789794555.7873113,
+    "seen": 1789796343.0211997,
+    "ast_hash": "232c5cc270e0567a0612f945f8c8579b",
+    "semantic_hash": "232c5cc270e0567a0612f945f8c8579b"
+  }
+}

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>k6 Load Test Results — SIP Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1117; --surface: #1a1d27; --surface2: #22263a;
+      --border: #2e3347; --text: #e2e8f0; --muted: #718096;
+      --green: #48bb78; --red: #fc8181; --blue: #63b3ed;
+      --yellow: #f6e05e; --orange: #f6ad55; --purple: #b794f4;
+      --teal: #4fd1c5; --pink: #f687b3;
+    }
+    body { background: var(--bg); color: var(--text); font-family: Inter, -apple-system, sans-serif; font-size: 14px; min-height: 100vh; }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px; display: flex; align-items: center; gap: 16px;
+    }
+    .header-icon { font-size: 28px; }
+    .header-title { font-size: 20px; font-weight: 700; }
+    .header-sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .header-spacer { flex: 1; }
+    .badge-pass { background: rgba(72,187,120,.15); border: 1px solid var(--green); color: var(--green); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; }
+    .badge-fail { background: rgba(252,129,129,.15); border: 1px solid var(--red); color: var(--red); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; }
+
+    /* ── Upload ── */
+    .upload-zone {
+      margin: 32px auto; max-width: 540px;
+      border: 2px dashed var(--border); border-radius: 12px;
+      padding: 48px 32px; text-align: center; cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .upload-zone:hover, .upload-zone.drag { border-color: var(--blue); background: rgba(99,179,237,.05); }
+    .upload-zone p { color: var(--muted); margin-top: 8px; font-size: 13px; }
+    .upload-zone span { font-size: 32px; }
+    #fileInput { display: none; }
+    .btn { padding: 8px 20px; border-radius: 6px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-blue { background: var(--blue); color: #0f1117; margin-top: 16px; }
+    .btn-blue:hover { opacity: .9; }
+
+    /* ── Dashboard ── */
+    #dashboard { display: none; padding: 24px 32px; }
+
+    /* ── KPI row ── */
+    .kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px; }
+    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+    .kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+    .kpi-val { font-size: 26px; font-weight: 700; line-height: 1; }
+    .kpi-unit { font-size: 13px; color: var(--muted); }
+    .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+    .green .kpi-val { color: var(--green); }
+    .blue  .kpi-val { color: var(--blue); }
+    .red   .kpi-val { color: var(--red); }
+    .yellow .kpi-val { color: var(--yellow); }
+    .purple .kpi-val { color: var(--purple); }
+    .orange .kpi-val { color: var(--orange); }
+    .teal  .kpi-val { color: var(--teal); }
+    .pink  .kpi-val { color: var(--pink); }
+
+    /* ── Data consumption section ── */
+    .section-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--muted);
+      margin: 20px 0 10px; display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .data-kpi-row {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      gap: 12px; margin-bottom: 20px;
+    }
+    .ratio-bar-wrap { display: flex; align-items: center; gap: 0; height: 18px; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+    .ratio-sent { background: var(--teal); height: 100%; transition: width .4s; }
+    .ratio-recv { background: var(--pink); height: 100%; transition: width .4s; }
+    .ratio-legend { display: flex; gap: 16px; margin-top: 6px; font-size: 11px; color: var(--muted); }
+    .ratio-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+
+    /* ── Threshold table ── */
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+    .panel-header { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .panel-title { font-size: 13px; font-weight: 600; }
+    .panel-body { padding: 16px 18px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; padding: 7px 12px; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+    td { padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,.04); font-family: 'Fira Code', monospace; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .pill-pass { background: rgba(72,187,120,.2); color: var(--green); }
+    .pill-fail { background: rgba(252,129,129,.2); color: var(--red); }
+
+    .bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .bar { height: 6px; border-radius: 3px; background: var(--blue); min-width: 2px; }
+
+    .insight { background: var(--surface2); border-left: 3px solid var(--blue); border-radius: 4px; padding: 12px 16px; margin-bottom: 10px; font-size: 13px; line-height: 1.6; }
+    .insight.warn { border-left-color: var(--yellow); }
+    .insight.good { border-left-color: var(--green); }
+    .insight b { color: var(--text); }
+
+    canvas { max-height: 220px; }
+
+    @media (max-width: 900px) {
+      .kpi-row { grid-template-columns: repeat(3, 1fr); }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-icon">⚡</div>
+  <div>
+    <div class="header-title">k6 Load Test Results</div>
+    <div class="header-sub" id="headerSub">SIP Calculator — local-load-test.js</div>
+  </div>
+  <div class="header-spacer"></div>
+  <div id="overallBadge"></div>
+</div>
+
+<!-- Upload zone (shown before data is loaded) -->
+<div id="uploadZone" class="upload-zone" onclick="document.getElementById('fileInput').click()"
+     ondragover="event.preventDefault();this.classList.add('drag')"
+     ondragleave="this.classList.remove('drag')"
+     ondrop="handleDrop(event)">
+  <span>📂</span>
+  <h3 style="margin-top:12px;color:var(--text)">Drop k6-results.json here</h3>
+  <p>Or click to browse. Generate the file with:<br>
+    <code style="color:var(--blue)">k6 run --out json=k6-results.json local-load-test.js</code>
+  </p>
+  <button class="btn btn-blue" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Choose file</button>
+  <input type="file" id="fileInput" accept=".json" onchange="loadFile(this.files[0])">
+</div>
+
+<div id="dashboard">
+
+  <div class="kpi-row">
+    <div class="kpi blue">  <div class="kpi-label">Total Requests</div><div class="kpi-val" id="kTotalReq">—</div><div class="kpi-sub" id="kReqRate">—</div></div>
+    <div class="kpi green"> <div class="kpi-label">Avg Response</div><div class="kpi-val" id="kAvg">—</div><div class="kpi-unit">ms</div></div>
+    <div class="kpi purple"><div class="kpi-label">p95 Latency</div><div class="kpi-val" id="kP95">—</div><div class="kpi-unit">ms</div></div>
+    <div class="kpi orange"><div class="kpi-label">p99 Latency</div><div class="kpi-val" id="kP99">—</div><div class="kpi-unit">ms</div></div>
+    <div class="kpi" id="kErrCard"><div class="kpi-label">Error Rate</div><div class="kpi-val" id="kErr">—</div><div class="kpi-unit">%</div></div>
+    <div class="kpi yellow"><div class="kpi-label">Max VUs</div><div class="kpi-val" id="kVUs">—</div></div>
+  </div>
+
+  <!-- ── Data Consumption ─────────────────────────────────────────────── -->
+  <div class="section-label">📦 Data / Token Consumption</div>
+  <div class="data-kpi-row">
+    <div class="kpi teal">
+      <div class="kpi-label">Total Sent</div>
+      <div class="kpi-val" id="kSentTotal">—</div>
+      <div class="kpi-sub" id="kSentRate">—</div>
+    </div>
+    <div class="kpi pink">
+      <div class="kpi-label">Total Received</div>
+      <div class="kpi-val" id="kRecvTotal">—</div>
+      <div class="kpi-sub" id="kRecvRate">—</div>
+    </div>
+    <div class="kpi" style="border-color:var(--teal)22">
+      <div class="kpi-label">Avg Sent / Req</div>
+      <div class="kpi-val" id="kAvgSent" style="color:var(--teal)">—</div>
+      <div class="kpi-unit">bytes</div>
+    </div>
+    <div class="kpi" style="border-color:var(--pink)22">
+      <div class="kpi-label">Avg Received / Req</div>
+      <div class="kpi-val" id="kAvgRecv" style="color:var(--pink)">—</div>
+      <div class="kpi-unit">bytes</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">Bandwidth Ratio</div>
+      <div class="kpi-val" id="kBwRatio">—</div>
+      <div class="kpi-unit">× recv/sent</div>
+      <div class="kpi-sub">response amplification</div>
+    </div>
+    <div class="kpi yellow">
+      <div class="kpi-label">Total Network I/O</div>
+      <div class="kpi-val" id="kTotalIO">—</div>
+      <div class="kpi-sub">sent + received</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:16px">
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Sent vs Received</span><span style="color:var(--muted);font-size:11px;margin-left:auto">bytes per request (avg)</span></div>
+      <div class="panel-body"><canvas id="dataChart" style="max-height:200px"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Payload Breakdown</span></div>
+      <div class="panel-body" style="padding:0">
+        <table>
+          <thead><tr><th>Direction</th><th>Total</th><th>Rate</th><th>Avg / Req</th><th>% of I/O</th></tr></thead>
+          <tbody id="dataTable"></tbody>
+        </table>
+        <div style="padding:12px 18px 16px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Sent ↔ Received split</div>
+          <div class="ratio-bar-wrap" id="ratioBar">
+            <div class="ratio-sent" id="ratioSent" style="width:50%"></div>
+            <div class="ratio-recv" id="ratioRecv" style="width:50%"></div>
+          </div>
+          <div class="ratio-legend">
+            <span><span class="ratio-dot" style="background:var(--teal)"></span>Sent <span id="ratioSentPct" style="color:var(--text)">—</span></span>
+            <span><span class="ratio-dot" style="background:var(--pink)"></span>Received <span id="ratioRecvPct" style="color:var(--text)">—</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Threshold results -->
+  <div class="panel" style="margin-bottom:16px">
+    <div class="panel-header"><span class="panel-title">Threshold Results</span></div>
+    <div class="panel-body" style="padding:0">
+      <table>
+        <thead><tr><th>Status</th><th>Metric</th><th>Expression</th><th>Value</th></tr></thead>
+        <tbody id="thresholdTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- HTTP duration distribution -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Response Time Distribution</span></div>
+      <div class="panel-body"><canvas id="latencyChart"></canvas></div>
+    </div>
+    <!-- Status codes -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">HTTP Status Breakdown</span></div>
+      <div class="panel-body"><canvas id="statusChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- All metrics breakdown -->
+  <div class="panel" style="margin-bottom:16px">
+    <div class="panel-header"><span class="panel-title">All Metrics</span></div>
+    <div class="panel-body" style="padding:0">
+      <table>
+        <thead><tr><th>Metric</th><th>Type</th><th>avg / rate</th><th>p50</th><th>p90</th><th>p95</th><th>max</th></tr></thead>
+        <tbody id="metricsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Performance insights -->
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Performance Insights</span></div>
+    <div class="panel-body" id="insightsBody"></div>
+  </div>
+
+  <!-- Grafana / run commands -->
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-header"><span class="panel-title">Run Commands</span></div>
+    <div class="panel-body">
+      <table>
+        <tr><th style="width:160px">Goal</th><th>Command</th></tr>
+        <tr><td>Basic run + JSON</td><td><code style="color:var(--blue)">k6 run --out json=k6-results.json local-load-test.js</code></td></tr>
+        <tr><td>Live Grafana (Docker)</td><td><code style="color:var(--blue)">cd k6-dashboard && docker compose up -d && cd .. && k6 run --out influxdb=http://localhost:8086/k6 local-load-test.js</code></td></tr>
+        <tr><td>Stress (50 VUs)</td><td><code style="color:var(--blue)">k6 run --vus 50 --duration 2m --out json=k6-stress.json local-load-test.js</code></td></tr>
+        <tr><td>Different target</td><td><code style="color:var(--blue)">BASE_URL=http://production.example.com k6 run local-load-test.js</code></td></tr>
+        <tr><td>View live Grafana</td><td><code style="color:var(--blue)">open http://localhost:3000</code> &nbsp;(after Docker stack is running)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const DARK_COLORS = ['#63b3ed','#48bb78','#fc8181','#f6e05e','#b794f4','#f6ad55','#76e4f7'];
+Chart.defaults.color = '#718096';
+Chart.defaults.borderColor = '#2e3347';
+Chart.defaults.plugins.legend.labels.color = '#718096';
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  loadFile(e.dataTransfer.files[0]);
+}
+
+function loadFile(file) {
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = (e) => { try { render(JSON.parse(e.target.result)); } catch(err) { alert('Invalid k6 JSON: ' + err.message); } };
+  r.readAsText(file);
+}
+
+function v(metrics, name, key) {
+  return metrics?.[name]?.values?.[key] ?? null;
+}
+
+function fmt(val, dec=2) {
+  if (val === null || val === undefined) return '—';
+  return Number(val).toFixed(dec);
+}
+
+function fmtBytes(bytes, dec=1) {
+  if (bytes === null || bytes === undefined) return '—';
+  if (bytes < 1024)       return bytes.toFixed(0) + ' B';
+  if (bytes < 1048576)    return (bytes / 1024).toFixed(dec) + ' KB';
+  if (bytes < 1073741824) return (bytes / 1048576).toFixed(dec) + ' MB';
+  return (bytes / 1073741824).toFixed(dec) + ' GB';
+}
+
+function fmtBytesRate(bps, dec=1) {
+  return fmtBytes(bps, dec) + '/s';
+}
+
+function render(data) {
+  const m = data.metrics || {};
+  document.getElementById('uploadZone').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  // ── KPIs ─────────────────────────────────────────────────────────
+  const totalReqs = v(m,'http_reqs','count') || 0;
+  const reqRate   = v(m,'http_reqs','rate');
+  const avg       = v(m,'http_req_duration','avg');
+  const p95       = v(m,'http_req_duration','p(95)');
+  const p99       = v(m,'http_req_duration','p(99)');
+  const errRate   = (v(m,'http_req_failed','rate') || 0) * 100;
+  const maxVUs    = v(m,'vus_max','max') || v(m,'vus','max') || '—';
+
+  document.getElementById('kTotalReq').textContent = totalReqs.toLocaleString();
+  document.getElementById('kReqRate').textContent  = reqRate ? `${fmt(reqRate,1)} req/s` : '';
+  document.getElementById('kAvg').textContent      = fmt(avg,1);
+  document.getElementById('kP95').textContent      = fmt(p95,1);
+  document.getElementById('kP99').textContent      = fmt(p99,1);
+  document.getElementById('kErr').textContent      = fmt(errRate,2);
+  document.getElementById('kVUs').textContent      = maxVUs;
+
+  const errCard = document.getElementById('kErrCard');
+  errCard.className = 'kpi ' + (errRate > 1 ? 'red' : 'green');
+
+  // ── Data consumption ─────────────────────────────────────────────
+  const sentBytes  = v(m,'data_sent','count')     || 0;
+  const recvBytes  = v(m,'data_received','count') || 0;
+  const sentRate   = v(m,'data_sent','rate')      || 0;
+  const recvRate   = v(m,'data_received','rate')  || 0;
+  const totalIO    = sentBytes + recvBytes;
+  const avgSent    = totalReqs > 0 ? sentBytes / totalReqs : 0;
+  const avgRecv    = totalReqs > 0 ? recvBytes / totalReqs : 0;
+  const bwRatio    = sentBytes > 0 ? recvBytes / sentBytes : 0;
+  const sentPct    = totalIO > 0 ? (sentBytes / totalIO * 100) : 50;
+  const recvPct    = 100 - sentPct;
+
+  document.getElementById('kSentTotal').textContent = fmtBytes(sentBytes);
+  document.getElementById('kSentRate').textContent  = fmtBytesRate(sentRate);
+  document.getElementById('kRecvTotal').textContent = fmtBytes(recvBytes);
+  document.getElementById('kRecvRate').textContent  = fmtBytesRate(recvRate);
+  document.getElementById('kAvgSent').textContent   = avgSent.toFixed(0);
+  document.getElementById('kAvgRecv').textContent   = avgRecv.toFixed(0);
+  document.getElementById('kBwRatio').textContent   = bwRatio.toFixed(1);
+  document.getElementById('kTotalIO').textContent   = fmtBytes(totalIO);
+  document.getElementById('ratioSent').style.width  = sentPct.toFixed(1) + '%';
+  document.getElementById('ratioRecv').style.width  = recvPct.toFixed(1) + '%';
+  document.getElementById('ratioSentPct').textContent = sentPct.toFixed(1) + '%';
+  document.getElementById('ratioRecvPct').textContent = recvPct.toFixed(1) + '%';
+
+  // Payload breakdown table
+  const dtbody = document.getElementById('dataTable');
+  dtbody.innerHTML = [
+    { dir:'↑ Sent',    total: sentBytes, rate: sentRate, avg: avgSent, pct: sentPct, color:'var(--teal)' },
+    { dir:'↓ Received',total: recvBytes, rate: recvRate, avg: avgRecv, pct: recvPct, color:'var(--pink)' },
+  ].map(r => `<tr>
+    <td style="color:${r.color};font-weight:600">${r.dir}</td>
+    <td>${fmtBytes(r.total)}</td>
+    <td>${fmtBytesRate(r.rate)}</td>
+    <td>${r.avg.toFixed(0)} B</td>
+    <td><div style="display:flex;align-items:center;gap:6px">
+      <div style="width:${Math.round(r.pct*0.8)}px;height:6px;background:${r.color};border-radius:3px;min-width:2px"></div>
+      ${r.pct.toFixed(1)}%
+    </div></td>
+  </tr>`).join('');
+
+  // Sent vs Received chart
+  new Chart(document.getElementById('dataChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Avg Bytes Sent / Req', 'Avg Bytes Received / Req'],
+      datasets: [{
+        label: 'bytes',
+        data: [avgSent, avgRecv],
+        backgroundColor: ['rgba(79,209,197,.75)', 'rgba(246,135,179,.75)'],
+        borderColor: ['#4fd1c5', '#f687b3'],
+        borderWidth: 1, borderRadius: 4,
+      }],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, animation: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#2e3347' }, ticks: { color: '#718096', callback: v => v + ' B' } },
+        y: { grid: { display: false }, ticks: { color: '#718096' } },
+      },
+    },
+  });
+
+  // ── Overall pass/fail ────────────────────────────────────────────
+  const allThresholds = Object.values(m).flatMap(mv =>
+    Object.values(mv.thresholds || {}).map(t => t.ok)
+  );
+  const allPass = allThresholds.length === 0 || allThresholds.every(Boolean);
+  document.getElementById('overallBadge').innerHTML = allPass
+    ? '<span class="badge-pass">✓ ALL THRESHOLDS PASSED</span>'
+    : '<span class="badge-fail">✗ THRESHOLD BREACHED</span>';
+
+  // ── Threshold table ──────────────────────────────────────────────
+  const tbody = document.getElementById('thresholdTable');
+  tbody.innerHTML = '';
+  for (const [metric, mv] of Object.entries(m)) {
+    if (!mv.thresholds) continue;
+    for (const [expr, result] of Object.entries(mv.thresholds)) {
+      const curVal = getCurrentValue(m, metric);
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><span class="pill ${result.ok ? 'pill-pass' : 'pill-fail'}">${result.ok ? '✓ PASS' : '✗ FAIL'}</span></td>
+        <td>${metric}</td>
+        <td style="color:var(--blue)">${expr}</td>
+        <td>${curVal}</td>`;
+      tbody.appendChild(row);
+    }
+  }
+
+  // ── All metrics table ────────────────────────────────────────────
+  const mtbody = document.getElementById('metricsTable');
+  mtbody.innerHTML = '';
+  const relevantMetrics = Object.entries(m)
+    .filter(([,mv]) => mv.type === 'trend' || mv.type === 'rate' || mv.type === 'counter')
+    .sort(([a],[b]) => a.localeCompare(b));
+
+  for (const [name, mv] of relevantMetrics) {
+    const vals = mv.values || {};
+    const tr = document.createElement('tr');
+    if (mv.type === 'trend') {
+      tr.innerHTML = `
+        <td>${name}</td><td style="color:var(--muted)">${mv.type}</td>
+        <td>${fmt(vals.avg)} ms</td>
+        <td>${fmt(vals['p(50)'] ?? vals.med)} ms</td>
+        <td>${fmt(vals['p(90)'])} ms</td>
+        <td>${fmt(vals['p(95)'])} ms</td>
+        <td>${fmt(vals.max)} ms</td>`;
+    } else if (mv.type === 'rate') {
+      tr.innerHTML = `
+        <td>${name}</td><td style="color:var(--muted)">${mv.type}</td>
+        <td>${fmt(vals.rate * 100, 2)} %</td>
+        <td colspan="4" style="color:var(--muted)">passes: ${vals.passes} / fails: ${vals.fails}</td>`;
+    } else {
+      tr.innerHTML = `
+        <td>${name}</td><td style="color:var(--muted)">${mv.type}</td>
+        <td>${(vals.count||0).toLocaleString()}</td>
+        <td colspan="4" style="color:var(--muted)">rate: ${fmt(vals.rate,1)}/s</td>`;
+    }
+    mtbody.appendChild(tr);
+  }
+
+  // ── Charts ───────────────────────────────────────────────────────
+  const dur = m.http_req_duration?.values || {};
+  new Chart(document.getElementById('latencyChart'), {
+    type: 'bar',
+    data: {
+      labels: ['min','p50','avg','p90','p95','p99','max'],
+      datasets: [{
+        label: 'ms',
+        data: [dur.min, dur['p(50)']||dur.med, dur.avg, dur['p(90)'], dur['p(95)'], dur['p(99)'], dur.max].map(v => v ?? 0),
+        backgroundColor: ['#48bb78','#63b3ed','#63b3ed','#f6ad55','#f6e05e','#fc8181','#fc8181'].map(c => c+'cc'),
+        borderColor: ['#48bb78','#63b3ed','#63b3ed','#f6ad55','#f6e05e','#fc8181','#fc8181'],
+        borderWidth: 1, borderRadius: 3,
+      }],
+    },
+    options: {
+      responsive: true, animation: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#2e3347' }, ticks: { color: '#718096' } },
+        y: { grid: { color: '#2e3347' }, ticks: { color: '#718096', callback: v => v+'ms' } },
+      },
+    },
+  });
+
+  const s2xx = (v(m,'http_req_failed','fails') || 0);
+  const sErr = (v(m,'http_req_failed','passes') || 0);
+  new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['2xx Success', '4xx/5xx / Error'],
+      datasets: [{
+        data: [s2xx, sErr],
+        backgroundColor: ['rgba(72,187,120,.75)', 'rgba(252,129,129,.75)'],
+        borderColor: ['#48bb78','#fc8181'], borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true, animation: false,
+      cutout: '60%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#718096', padding: 16 } },
+      },
+    },
+  });
+
+  // ── Insights ─────────────────────────────────────────────────────
+  const insights = [];
+  if (p95 !== null && p95 < 10)
+    insights.push({ cls:'good', text:`<b>Outstanding latency:</b> p95 = ${fmt(p95)}ms — the SIP calculator handles 10 VUs with sub-10ms response times. Node.js + in-process math is effectively zero overhead.` });
+  else if (p95 !== null && p95 < 100)
+    insights.push({ cls:'good', text:`<b>Excellent latency:</b> p95 = ${fmt(p95)}ms — well within the 500ms SLO.` });
+  else if (p95 !== null && p95 >= 500)
+    insights.push({ cls:'warn', text:`<b>Latency threshold breached:</b> p95 = ${fmt(p95)}ms exceeds the 500ms SLO. Investigate slow iterations in the data.` });
+
+  if (errRate < 1)
+    insights.push({ cls:'good', text:`<b>Error rate clean:</b> ${fmt(errRate,2)}% — within the 1% SLO.` });
+  else
+    insights.push({ cls:'warn', text:`<b>Error rate ${fmt(errRate,2)}%</b> exceeds the 1% threshold. If you injected bad payloads intentionally, add <code>setResponseCallback(http.expectedStatuses(200,400))</code> to exclude expected 400s from <code>http_req_failed</code>.` });
+
+  if (reqRate !== null)
+    insights.push({ cls:'', text:`<b>Throughput:</b> ${fmt(reqRate,1)} req/s across ${maxVUs} VUs. To saturate the backend, try scaling to 50–100 VUs with <code>k6 run --vus 50 --duration 2m local-load-test.js</code>.` });
+
+  const sipSr = v(m,'sip_success_rate','rate');
+  if (sipSr !== null)
+    insights.push({ cls: sipSr >= 0.99 ? 'good' : 'warn', text: `<b>Business-logic success rate: ${fmt(sipSr*100,2)}%</b> — all valid payloads returned correct SIP results (totalValue, investedAmount, yearlyBreakdown present).` });
+
+  if (totalIO > 0) {
+    const ratioLabel = bwRatio > 5 ? 'high response amplification' : bwRatio > 2 ? 'moderate amplification' : 'lean payloads';
+    const cls = bwRatio > 10 ? 'warn' : '';
+    insights.push({ cls, text:
+      `<b>Network I/O:</b> ${fmtBytes(sentBytes)} sent → ${fmtBytes(recvBytes)} received across ${totalReqs.toLocaleString()} requests ` +
+      `(${fmtBytesRate(sentRate)} ↑ / ${fmtBytesRate(recvRate)} ↓). ` +
+      `Average payload: <b>${avgSent.toFixed(0)} B sent</b> / <b>${avgRecv.toFixed(0)} B received</b> per request — ` +
+      `${bwRatio.toFixed(1)}× bandwidth ratio (${ratioLabel}). ` +
+      (bwRatio > 10 ? 'Consider response compression (gzip/br) to reduce receive traffic.' :
+       'Payload sizes are efficient for a JSON calculation API.')
+    });
+  }
+
+  document.getElementById('insightsBody').innerHTML = insights.map(i =>
+    `<div class="insight ${i.cls}">${i.text}</div>`
+  ).join('');
+}
+
+function getCurrentValue(m, metric) {
+  const vals = m[metric]?.values || {};
+  const t = m[metric]?.type;
+  if (t === 'rate') return `${fmt(vals.rate*100,2)}%`;
+  if (t === 'trend') return `avg=${fmt(vals.avg)}ms p95=${fmt(vals['p(95)'])}ms`;
+  if (t === 'counter') return `${(vals.count||0).toLocaleString()}`;
+  return JSON.stringify(vals).slice(0,40);
+}
+
+// Auto-load k6-results.json if served from the Express backend
+fetch('/k6-results.json')
+  .then(r => r.ok ? r.json() : Promise.reject('not found'))
+  .then(data => render(data))
+  .catch(() => {/* no auto-load — user will drop the file */});
+</script>
+</body>
+</html>

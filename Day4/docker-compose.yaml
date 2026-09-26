@@ -1,0 +1,81 @@
+services:
+
+  # --------------------------------------------------------------------------
+  # OpenTelemetry Collector
+  # Receives OTLP (gRPC 4317 / HTTP 4318), fans out to Tempo (traces) and
+  # Prometheus (metrics via scrape endpoint on 9464).
+  # --------------------------------------------------------------------------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "9464:9464"   # Prometheus scrape target
+    networks:
+      - observability
+    restart: unless-stopped
+
+  # --------------------------------------------------------------------------
+  # Prometheus  –  metrics storage
+  # Scrapes the collector's /metrics endpoint every 15 s.
+  # --------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - observability
+    depends_on:
+      - otel-collector
+    restart: unless-stopped
+
+  # --------------------------------------------------------------------------
+  # Grafana Tempo  –  distributed trace backend
+  # Receives OTLP gRPC from the collector on the internal network (port 4317).
+  # HTTP API on 3200 is used by Grafana to query traces.
+  # --------------------------------------------------------------------------
+  tempo:
+    image: grafana/tempo:latest
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml:ro
+    ports:
+      - "3200:3200"   # Tempo HTTP query API
+    networks:
+      - observability
+    restart: unless-stopped
+
+  # --------------------------------------------------------------------------
+  # Grafana  –  unified dashboards
+  # Auto-provisions Prometheus + Tempo as data sources via the mounted
+  # provisioning directory. Anonymous admin access enabled for local dev.
+  # --------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=false
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - observability
+    depends_on:
+      - prometheus
+      - tempo
+    restart: unless-stopped
+
+networks:
+  observability:
+    driver: bridge
+
+volumes:
+  grafana-data:
